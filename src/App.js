@@ -1,26 +1,46 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react'
+import './App.css'
+import { TrainingArea } from './components/TrainingArea'
+// import KeyboardEventHandler from 'react-keyboard-event-handler'
+import { Shortcuts } from './components/Shortcuts'
+import { AddShortcut } from './components/AddShortcut'
 
-function App() {
+const defaultShortcuts = [{ name: 'Save', keys: ['up'] }]
+
+function App () {
+  const [isTraining, setIsTraining] = useState(false)
+  const [isAddingShortcut, setIsAddingShortcut] = useState(true)
+  const [shortcuts, setShortcuts] = useState(defaultShortcuts)
+
+  function startTraining () {
+    setIsTraining(true)
+  }
+
+  function startAddingShortcut () {
+    setIsAddingShortcut(true)
+  }
+
+  function addShortcut (shortcut) {
+    setIsAddingShortcut(false)
+    const newShortcuts = shortcuts
+    newShortcuts.push(shortcut)
+    setShortcuts(newShortcuts)
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+      <h1>Shortcut Trainer</h1>
+      {isAddingShortcut ? (
+        <AddShortcut addShortcut={addShortcut} />
+      ) : (
+        <button onClick={startAddingShortcut}>Add shortcut</button>
+      )}
+      <br />
+      {isTraining ? <TrainingArea /> : <button onClick={startTraining}>Train!</button>}
+      <br />
+      <Shortcuts shortcuts={shortcuts} />
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
